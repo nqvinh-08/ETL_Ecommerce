@@ -10,7 +10,7 @@
 ## Installation && ETL Pipeline
 
     ### 1. Clone project
-        git clone <https://github.com/nqvinh-08/thuctap>
+        git clone <https://github.com/nqvinh-08/ETL_HeThongThuongMai.git>
     ### 2. Setup environment
         .env
     ### 3.venv (virtual environment)
