@@ -1,0 +1,60 @@
+.env
+node_modules/
+# =========================
+# Python
+# =========================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+ENV/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# =========================
+# Node.js
+# =========================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build folders
+dist/
+coverage/
+
+# Environment variables
+.env
+
+# =========================
+# Editor
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+# OSdata/*
+# =========================
+
+.DS_Store
+Thumbs.db
+
+data/*
+
+logs/*
