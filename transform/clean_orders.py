@@ -17,11 +17,18 @@ def parse_date(date_str):
 
 
 def clean_orders(rows):
+    seen = set()
     result = []
 
     for r in rows:
+        r = r.copy() #tao bản sao của dictionary
         r.pop("seller_id", None) #neu ko co tra ve none
-
+        order_id = r["order_id"]
+        if order_id in seen : #duplicate
+            continue
+        seen.add(order_id)
+        if not r["order_date"]:
+            continue
         r["order_date"] = parse_date(r["order_date"])
         r["ship_date"] = parse_date(r["ship_date"])
 

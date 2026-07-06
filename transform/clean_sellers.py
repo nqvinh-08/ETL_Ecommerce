@@ -11,14 +11,17 @@ def clean_sellers(rows):
         "hai phong": "Hai Phong"
     }
     for row in rows:
+        r = row.copy() #tao ban sao cua dictionary
         seller_id = row["seller_id"].strip()
         # seller_id rỗng
         if not seller_id:
             continue
+
         # duplicate
         if seller_id in seen:
             continue
         seen.add(seller_id)
+
         # seller_name rỗng
         if not row["seller_name"].strip():
             continue

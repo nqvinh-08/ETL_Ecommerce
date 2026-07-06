@@ -31,17 +31,18 @@ def load_fact(stg, dim):
             continue
         order_date = pd.to_datetime(
             order["order_date"],
-            errors="coerce"
+            errors="coerce" #gia tri khong hop le se tra ve NaT
         )
         if pd.isna(order_date):
             continue
         date_sk = int(
             order_date.strftime("%Y%m%d")
         )
-        revenue = (
-            item["quantity"] * item["unit_price"]
-            - item["discount"]
-        )
+        quantity = int(item["quantity"])
+        unit_price = float(item["unit_price"])
+        discount = float(item["discount"])
+
+        revenue = quantity * unit_price - discount
         fact.append({
             "order_id": item["order_id"],
             "date_sk": date_sk,
@@ -51,9 +52,9 @@ def load_fact(stg, dim):
             "product_sk": product_map.get(
                 item["product_id"], 0
             ),
-            "quantity": item["quantity"],
-            "unit_price": item["unit_price"],
-            "discount": item["discount"],
+            "quantity": quantity,
+            "unit_price": unit_price,
+            "discount": discount,
             "revenue": revenue
         })
     fact_df = pd.DataFrame(fact)

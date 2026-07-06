@@ -43,6 +43,7 @@ def run_pipeline():
     orders = clean_orders(raw_data["orders"])
     order_items = clean_order_items(raw_data["order_items"])
     print("✔ Transform done")
+
     # gom lại
     stg_input = {
         "customers": customers,
@@ -53,11 +54,11 @@ def run_pipeline():
     }
 
     #load stg
-    load_stg_table(customers, "stg_customer")
-    load_stg_table(products, "stg_product")
-    load_stg_table(sellers, "stg_seller")
-    load_stg_table(orders, "stg_order")
-    load_stg_table(order_items, "stg_order_item")
+    load_stg_table(raw_data["customers"], "stg_customer")
+    load_stg_table(raw_data["products"], "stg_product")
+    load_stg_table(raw_data["sellers"], "stg_seller")
+    load_stg_table(raw_data["orders"], "stg_order")
+    load_stg_table(raw_data["order_items"], "stg_order_item")
     print("✔ STG loaded")
 
     #load dim

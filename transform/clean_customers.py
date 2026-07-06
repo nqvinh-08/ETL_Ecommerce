@@ -1,3 +1,4 @@
+
 def clean_customers(rows):
     gender_map = {
         "m": "Male", "male": "Male",
@@ -20,7 +21,7 @@ def clean_customers(rows):
     for r in rows:
         cid = r["customer_id"]
 
-        if cid in seen:
+        if cid in seen: #duplicate
             continue
         seen.add(cid)
         r["customer_name"] = r["customer_name"].strip().title() #xoa khoang trang dauu cuoi

@@ -16,7 +16,7 @@ def load_dim_customer(stg_customers):
 
     dim = []
 
-    for i, c in enumerate(stg_customers):
+    for i, c in enumerate(stg_customers): #enumerate: tra ve index va gia tri
         dim.append({
             "customer_sk": i + 1,
             "customer_id": c["customer_id"],

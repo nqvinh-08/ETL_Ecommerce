@@ -3,8 +3,10 @@ def clean_products(rows):
     result = []
 
     for r in rows:
+        r = r.copy() #tao ban sao cua dictionary
+        
         pid = r["product_id"]
-        if pid in seen:
+        if pid in seen: #duplicate
             continue
         seen.add(pid)
 
