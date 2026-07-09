@@ -11,8 +11,8 @@ client = clickhouse_connect.get_client(
     password=os.getenv("CLICKHOUSE_PASSWORD"),
     database=os.getenv("CLICKHOUSE_DATABASE")
 )
-
+#LOAD VAO BANG STG
 def load_stg_table(df, table_name):
     df = pd.DataFrame(df)
     client.insert_df(table_name, df)
-    print(f"✔ Loaded STG: {table_name}")
+    print(f"Loaded STG: {table_name}")

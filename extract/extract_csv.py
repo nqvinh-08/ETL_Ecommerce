@@ -3,13 +3,14 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+#DOC DU LIEU TU FILE CSV
 def extract():
     files = {
-        "customers": os.getenv("LINKCUSTOMER"),
-        "products": os.getenv("LINKPRODUCT"),
-        "sellers": os.getenv("LINKSELLER"),
-        "orders": os.getenv("LINKORDER"),
-        "order_items": os.getenv("LINKORDERITEM")
+        "customers": os.getenv("FILECUSTOMER"),
+        "products": os.getenv("FILEPRODUCT"),
+        "sellers": os.getenv("FILESELLER"),
+        "orders": os.getenv("FILEORDER"),
+        "order_items": os.getenv("FILEORDERITEM")
     }
     data = {}
     for table_name, file_path in files.items():
