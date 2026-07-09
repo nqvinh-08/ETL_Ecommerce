@@ -28,26 +28,24 @@ def load_fact(stg, dim):
     #chuyen sang string--> int
     df["date_sk"] = df["order_date"].dt.strftime("%Y%m%d").astype(int)
 
+    #chuan hoa du lieu, fillna, ep kieu 
     df["customer_sk"] = (
         df["customer_id"]
         .map(customer_map)
         .fillna(0)
         .astype(int)
     )
-
     df["product_sk"] = (
         df["product_id"]
         .map(product_map)
         .fillna(0)
         .astype(int)
     )
-
     df["discount"] =(
         df["discount"]
-        .fillna(0)
+        .interpolate() #uoc luong gia tri
         .astype(float)
     ) 
-
     df["revenue"] = df["quantity"] * df["unit_price"] - df["discount"]
 
     fact_df = df[
