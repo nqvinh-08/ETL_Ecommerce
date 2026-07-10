@@ -3,7 +3,7 @@
         Extract data from file CSV 
         --> Load to table STG (data raw)
         --> Transform (chuan hoa du lieu, xu li Null,deduplicate)
-        --> Load to table Dim/ Fact (Load new Data)
+        --> Load to table Dim/ Fact (Load new Data, dung batch)
 ## Project structure
     project
     ├── extract/        #lay du lieu

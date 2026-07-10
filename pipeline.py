@@ -50,33 +50,37 @@ def run_pipeline():
     client = get_client()
 
     # LOAD DATA VAO BANG STG 
-    load_stg_table(client,raw_data["customers"], "stg_customer")
-    load_stg_table(client,raw_data["products"], "stg_product")
-    load_stg_table(client,raw_data["sellers"], "stg_seller")
-    load_stg_table(client,raw_data["orders"], "stg_order")
-    load_stg_table(client,raw_data["order_items"], "stg_order_item")
-    print("STG loaded")
+    try:
+        load_stg_table(client,raw_data["customers"], "stg_customer")
+        load_stg_table(client,raw_data["products"], "stg_product")
+        load_stg_table(client,raw_data["sellers"], "stg_seller")
+        load_stg_table(client,raw_data["orders"], "stg_order")
+        load_stg_table(client,raw_data["order_items"], "stg_order_item")
+        print("STG loaded")
 
-    #LOAD VAO BANG DIM
-    load_dim_customer(client,customers)
-    load_dim_product(client,products)
-    load_dim_seller(client,sellers)
-    load_dim_date(client,orders)
-    print("DIM loaded")
+        #LOAD VAO BANG DIM
+        load_dim_customer(client,customers)
+        load_dim_product(client,products)
+        load_dim_seller(client,sellers)
+        load_dim_date(client,orders)
+        print("DIM loaded")
 
-    stg = {
-        "customers": customers,
-        "products": products,
-        "sellers": sellers,
-        "orders": orders,
-        "order_items": order_items
-    }
-    #LOAD VAO BANG FACT
-    load_fact(client,stg)
-    print("FACT loaded")
+        stg = {
+            "customers": customers,
+            "products": products,
+            "sellers": sellers,
+            "orders": orders,
+            "order_items": order_items
+        }
+        #LOAD VAO BANG FACT
+        load_fact(client,stg)
+        print("FACT loaded")
 
-    print("\n ETL xong\n")
-
+        print("\n ETL xong\n")
+        
+    # dong ket noi db
+    finally :
+        client.close()
 # chay pipeline khi goi file nay truc tiep
 if __name__ == "__main__":
     run_pipeline()
