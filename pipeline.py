@@ -1,24 +1,38 @@
-import sys
-import os
-# đảm bảo import đúng project
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
+"""
+ETL Pipeline cho hệ thống quản lý cửa hàng.
+Quy trình:
+1. Extract dữ liệu từ file CSV.
+2. Transform và làm sạch dữ liệu.
+3. Load dữ liệu vào các bảng staging.
+4. Load dữ liệu vào các bảng dimension.
+5. Load dữ liệu vào bảng fact.
+"""
+from config.database import get_client
 from extract.extract_csv import extract
 from transform.clean_data import clean_customers, clean_products, clean_sellers, clean_orders, clean_order_items
 from dotenv import load_dotenv
 load_dotenv()
-
-from load.load_stg import load_stg_table
-from load.load_dim import (
+from store_data.store_data import(
+    load_stg_table,
     load_dim_customer,
     load_dim_date,
     load_dim_product,
-    load_dim_seller
+    load_dim_seller,
+    load_fact
 )
-from load.load_fact import load_fact
-
 
 def run_pipeline():
+    """
+        Thực thi toàn bộ quy trình ETL.
+        Các bước thực hiện:
+        - Extract dữ liệu từ các file CSV.
+        - Transform và làm sạch dữ liệu.
+        - Load dữ liệu vào các bảng STG.
+        - Load dữ liệu vào các bảng Dimension.
+        - Load dữ liệu vào bảng Fact.
+        Returns:
+            None
+    """
     print("\n START PIPELINE\n")
 
     #EXTRACT
@@ -33,28 +47,24 @@ def run_pipeline():
     order_items = clean_order_items(raw_data["order_items"])
     print("Transform done")
 
+    client = get_client()
+
     # LOAD DATA VAO BANG STG 
-    load_stg_table(raw_data["customers"], "stg_customer")
-    load_stg_table(raw_data["products"], "stg_product")
-    load_stg_table(raw_data["sellers"], "stg_seller")
-    load_stg_table(raw_data["orders"], "stg_order")
-    load_stg_table(raw_data["order_items"], "stg_order_item")
+    load_stg_table(client,raw_data["customers"], "stg_customer")
+    load_stg_table(client,raw_data["products"], "stg_product")
+    load_stg_table(client,raw_data["sellers"], "stg_seller")
+    load_stg_table(client,raw_data["orders"], "stg_order")
+    load_stg_table(client,raw_data["order_items"], "stg_order_item")
     print("STG loaded")
 
     #LOAD VAO BANG DIM
-    dim_customer = load_dim_customer(customers)
-    dim_product = load_dim_product(products)
-    dim_seller = load_dim_seller(sellers)
-    dim_date = load_dim_date(orders)
-    dim = {
-        "customer": dim_customer,
-        "product": dim_product,
-        "seller": dim_seller,
-        "date": dim_date
-    }
+    load_dim_customer(client,customers)
+    load_dim_product(client,products)
+    load_dim_seller(client,sellers)
+    load_dim_date(client,orders)
     print("DIM loaded")
 
-    input_cleaned = {
+    stg = {
         "customers": customers,
         "products": products,
         "sellers": sellers,
@@ -62,7 +72,7 @@ def run_pipeline():
         "order_items": order_items
     }
     #LOAD VAO BANG FACT
-    load_fact(input_cleaned, dim)
+    load_fact(client,stg)
     print("FACT loaded")
 
     print("\n ETL xong\n")

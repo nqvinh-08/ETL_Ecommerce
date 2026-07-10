@@ -5,6 +5,10 @@ load_dotenv()
 
 #DOC DU LIEU TU FILE CSV
 def extract():
+    """
+        doc du lieu tu file csv trong env.
+        return : dictionary chua du lieu cua tung bang
+    """
     files = {
         "customers": os.getenv("FILECUSTOMER"),
         "products": os.getenv("FILEPRODUCT"),

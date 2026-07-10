@@ -1,21 +1,32 @@
 import pandas as pd
 from datetime import datetime
 
-# Lam sach du lieu (chuan hoa,fillna, deduplicate)
 #lam sach products
 def clean_products(rows):
+    """
+        chuan hoa du lieu, fillna, deduplicate
+        args: 
+            rows(list[dict]): du lieu goc
+        return :
+            list[dict]: du lieu da duoc lam sach 
+    """
+    df_products = pd.DataFrame(rows)
+    df_products["category"] = df_products["category"].str.strip().str.title().fillna("Unknown")
+    df_products["brand"] = df_products["brand"].str.strip().str.title().fillna("Unknown")
 
-    df = pd.DataFrame(rows)
-    df["category"] = df["category"].str.strip().str.title().fillna("Unknown")
-    df["brand"] = df["brand"].str.strip().str.title().fillna("Unknown")
+    df_products = df_products.drop_duplicates(subset=["product_id"])
 
-    df = df.drop_duplicates(subset=["product_id"])
-
-    return df.to_dict("records")
+    return df_products.to_dict("records")
 
 # lam sach sellers
 def clean_sellers(rows):
-
+    """
+        chuan hoa du lieu theo map , fillna, deduplicate
+        args: 
+            rows(list[dict]): du lieu goc
+        return :
+            list[dict]: du lieu da duoc lam sach 
+    """
     city_map = {
         "hanoi": "Hanoi",
         "ha noi": "Hanoi",
@@ -24,17 +35,24 @@ def clean_sellers(rows):
         "da nang": "Da Nang",
         "hai phong": "Hai Phong"
     }
-    df= pd.DataFrame(rows)
+    df_seller= pd.DataFrame(rows)
 
-    df["seller_name"] = df["seller_name"].str.strip().str.title().fillna("Unknown")
-    df["city"] = df["city"].str.strip().str.lower().map(city_map).fillna("Unknown")
+    df_seller["seller_name"] = df_seller["seller_name"].str.strip().str.title().fillna("Unknown")
+    df_seller["city"] = df_seller["city"].str.strip().str.lower().map(city_map).fillna("Unknown")
 
-    df = df.drop_duplicates(subset=["seller_id"])
+    df_seller = df_seller.drop_duplicates(subset=["seller_id"])
 
-    return df.to_dict("records") 
+    return df_seller.to_dict("records") 
 
 #lam sach customers
 def clean_customers(rows):
+    """
+        chuan hoa du lieu theo map , fillna, deduplicate
+        args: 
+            rows(list[dict]): du lieu goc
+        return :
+            list[dict]: du lieu da duoc lam sach 
+    """
     gender_map = {
         "m": "Male", "male": "Male",
         "f": "Female", "female": "Female",
@@ -49,41 +67,56 @@ def clean_customers(rows):
         "da nang": "Da Nang",
         "hai phong": "Hai Phong"
     }
-    df = pd.DataFrame(rows)
-    df["customer_name"] = df["customer_name"].str.strip().str.title().fillna("Unknown")
-    df["gender"] = df["gender"].str.strip().str.lower().map(gender_map).fillna("Unknown")
-    df["city"] = df["city"].str.strip().str.lower().map(city_map).fillna("Unknown")
-    df["segment"] = df["segment"].str.strip().str.title().fillna("Regular")
+    df_customer = pd.DataFrame(rows)
+    df_customer["customer_name"] = df_customer["customer_name"].str.strip().str.title().fillna("Unknown")
+    df_customer["gender"] = df_customer["gender"].str.strip().str.lower().map(gender_map).fillna("Unknown")
+    df_customer["city"] = df_customer["city"].str.strip().str.lower().map(city_map).fillna("Unknown")
+    df_customer["segment"] = df_customer["segment"].str.strip().str.title().fillna("Regular")
 
-    df = df.drop_duplicates(subset=["customer_id"])
+    df_customer = df_customer.drop_duplicates(subset=["customer_id"])
 
-    return df.to_dict("records")
+    return df_customer.to_dict("records")
 
 #lam sach orders_items(ep kieu)
 def clean_order_items(rows):
-    df = pd.DataFrame(rows)
-    df["quantity"] = df["quantity"].fillna(0).astype(int)
-    df["unit_price"] = df["unit_price"].fillna(0).astype(float)
-    df["discount"] = df["discount"].fillna(0).astype(float)
+    """
+        chuan hoa du lieu , fillna, deduplicate
+        args: 
+            rows(list[dict]): du lieu goc
+        return :
+            list[dict]: du lieu da duoc lam sach 
+    """
+    df_order_items = pd.DataFrame(rows)
+    df_order_items["quantity"] = df_order_items["quantity"].fillna(0).astype(int)
+    df_order_items["unit_price"] = df_order_items["unit_price"].fillna(0).astype(float)
+    df_order_items["discount"] = df_order_items["discount"].fillna(0).astype(float)
 
-    df = df.drop_duplicates(subset=["order_id"])
+    df_order_items = df_order_items.drop_duplicates(subset=["order_id"])
 
-    return df.to_dict("records")
+    return df_order_items.to_dict("records")
 
 #lam sach orders(chuyen / --> - va ep kieu format)
 def clean_orders(rows):
-    df = pd.DataFrame(rows)
+    """
+        chuan hoa du lieu , dropna, deduplicate,ep kieu format
+        args: 
+            rows(list[dict]): du lieu goc
+        return :
+            list[dict]: du lieu da duoc lam sach 
+    """
+    df_order = pd.DataFrame(rows)
     #parse date
-    df["order_date"]= df["order_date"].str.replace("/", "-")
-    df["ship_date"]= df["ship_date"].str.replace("/", "-")
+    df_order["order_date"]= df_order["order_date"].str.replace("/", "-")
+    df_order["ship_date"]= df_order["ship_date"].str.replace("/", "-")
 
-    df["order_date"] =pd.to_datetime(df["order_date"], format='%Y-%m-%d',errors='coerce')
-    df["ship_date"] = pd.to_datetime(df["ship_date"], format='%Y-%m-%d',errors='coerce')
+    df_order["order_date"] =pd.to_datetime(df_order["order_date"], format='%Y-%m-%d',errors='coerce')
+    df_order["ship_date"] = pd.to_datetime(df_order["ship_date"], format='%Y-%m-%d',errors='coerce')
 
-    df = df.dropna(subset=["order_date", "ship_date"]) #loai bo cac dong co order_date hoac ship_date la NaT
+    #loai bo cac dong co order_date hoac ship_date la NaT
+    df_order = df_order.dropna(subset=["order_date", "ship_date"]) 
 
-    df = df.drop_duplicates(subset=["order_id"])
+    df_order = df_order.drop_duplicates(subset=["order_id"])
 
-    return df.to_dict("records")
+    return df_order.to_dict("records")
 
 
