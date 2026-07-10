@@ -59,18 +59,18 @@ def clean_customers(rows):
 
     return df.to_dict("records")
 
-#lam sach orders_items
+#lam sach orders_items(ep kieu)
 def clean_order_items(rows):
     df = pd.DataFrame(rows)
-    df["quantity"] = df["quantity"].astype(int)
-    df["unit_price"] = df["unit_price"].astype(float)
+    df["quantity"] = df["quantity"].fillna(0).astype(int)
+    df["unit_price"] = df["unit_price"].fillna(0).astype(float)
     df["discount"] = df["discount"].fillna(0).astype(float)
 
     df = df.drop_duplicates(subset=["order_id"])
 
     return df.to_dict("records")
 
-#lam sach orders
+#lam sach orders(chuyen / --> - va ep kieu format)
 def clean_orders(rows):
     df = pd.DataFrame(rows)
     #parse date

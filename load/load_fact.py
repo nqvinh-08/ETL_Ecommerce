@@ -77,5 +77,11 @@ def load_fact(stg, dim):
             "revenue"
         ]
     ]
-
+    
+    #chi lay du lieu moi
+    df_new = client.query_df("select order_id from fact_order")
+    fact_df = fact_df[
+        ~fact_df["order_id"].isin(df_new["order_id"])
+    ]
+    
     client.insert_df("fact_order", fact_df)

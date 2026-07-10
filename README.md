@@ -1,6 +1,9 @@
 ## Project description
-    Du an ETL du lieu lay tu file csv:
-        extract data --> load vao bang stg(raw) --> transform(bo null, chuan hoa du lieu, deduplicate) --> load vao bang dim/fact
+    Du an ETL du lieu su dung pandas:
+        Extract data from file CSV 
+        --> Load to table STG (data raw)
+        --> Transform (chuan hoa du lieu, xu li Null,deduplicate)
+        --> Load to table Dim/ Fact (Load new Data)
 ## Project structure
     project
     ├── extract/        #lay du lieu

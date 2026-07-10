@@ -47,9 +47,9 @@ def load_dim_customer(stg_customers):
     #neu co tim giatri max
     else:
         start_sk = existing_sk["customer_sk"].max() +1
+
     df.insert(0,"customer_sk", range(start_sk , start_sk+ len(df)))
     
-
     client.insert_df("dim_customer", df)
     return df.to_dict("records")
 
@@ -142,7 +142,8 @@ def load_dim_date(stg_orders):
         "day": df["order_date"].dt.day
         }
     )
-
+    existing_df = client.query_df("select date_sk from dim_date")
+    
     dim_date =dim_date.drop_duplicates(subset=["date_sk"])
 
     client.insert_df("dim_date", dim_date)
